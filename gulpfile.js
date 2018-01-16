@@ -38,7 +38,6 @@ const buffer = require('vinyl-buffer');
 const merge = require('merge-stream');
 const wait = require('gulp-wait');
 const htmlbeautify = require('gulp-html-beautify');
-const babel = require('gulp-babel');
 
 // Перечисление и настройки плагинов postCSS, которыми обрабатываются стилевые файлы
 let postCssPlugins = [
@@ -61,8 +60,8 @@ let images = [
 
 // Cписок обрабатываемых файлов в указанной последовательности
 let jsList = [
-  './node_modules/jquery/dist/jquery.min.js',
-  './node_modules/popper.js/dist/popper.min.js',
+  './node_modules/jquery/dist/jquery.js',
+  './node_modules/popper.js/dist/umd/popper.js',
   './node_modules/bootstrap/dist/js/bootstrap.min.js',
   // './node_modules/jquery-migrate/dist/jquery-migrate.min.js',
   dirs.source + '/js/script.js',
@@ -219,9 +218,6 @@ gulp.task('js', function () {
   if(jsList.length) {
     return gulp.src(jsList)
       .pipe(plumber({ errorHandler: onError }))             // не останавливаем автоматику при ошибках
-      .pipe(babel({
-        presets: ['env']
-      }))
       .pipe(concat('script.min.js'))                        // конкатенируем все файлы в один с указанным именем
       .pipe(uglify())                                       // сжимаем
       .pipe(gulp.dest(dirs.build + '/js'));                 // записываем
